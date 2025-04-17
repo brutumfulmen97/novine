@@ -19,4 +19,4 @@ services:
 
 volumes:
   media-storage:
-    name: ${PROJECT_NAME}-media-storage
+    name: payload-media-storage
