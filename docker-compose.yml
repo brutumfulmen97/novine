@@ -1,31 +1,34 @@
-version: '3'
-
 services:
-  payload:
-    image: node:18-alpine
-    ports:
-      - '3000:3000'
-    volumes:
-      - .:/home/node/app
-      - node_modules:/home/node/app/node_modules
-    working_dir: /home/node/app/
-    command: sh -c "yarn install && yarn dev"
-    depends_on:
-      - mongo
+  postgres-db:
+    image: postgres:16.4-alpine
+    restart: unless-stopped
     env_file:
-      - .env
-
-  mongo:
-    image: mongo:latest
-    ports:
-      - '27017:27017'
-    command:
-      - --storageEngine=wiredTiger
+      - path: ./.env
+        required: true
     volumes:
-      - data:/data/db
-    logging:
-      driver: none
+      - postgres-data:/data/db
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}']
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
+    container_name: postgres-db
+
+  payload:
+    image: node:22.12.0-alpine
+    container_name: payload
+    depends_on:
+      postgres-db:
+        condition: service_healthy
+    working_dir: /app
+    volumes:
+      - ./:/app
+    labels:
+      - 'traefik.http.services.${PROJECT_NAME}_node.loadbalancer.server.port=3000'
+      - 'traefik.http.routers.${PROJECT_NAME}_node.rule=Host(`${PROJECT_BASE_URL}`)'
+    command: sh -c 'npm install && npm run dev'
 
 volumes:
-  data:
-  node_modules:
+  postgres-data:
+    name: postgres-data
