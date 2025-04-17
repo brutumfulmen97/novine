@@ -27,7 +27,7 @@ services:
     labels:
       - 'traefik.http.services.${PROJECT_NAME}_node.loadbalancer.server.port=3000'
       - 'traefik.http.routers.${PROJECT_NAME}_node.rule=Host(`${PROJECT_BASE_URL}`)'
-    command: sh -c 'npm install && npm run dev'
+    command: sh -c "corepack enable && corepack prepare pnpm@9.0.0 --activate && pnpm install && pnpm dev"
 
 volumes:
   postgres-data:
