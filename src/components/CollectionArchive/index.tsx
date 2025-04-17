@@ -21,7 +21,7 @@ export const CollectionArchive: React.FC<Props> = (props) => {
               return (
                 <div className="col-span-4" key={index}>
                   {relationTo === 'events' ? (
-                    <EventCard className="h-full" doc={result} relationTo="events" showCategories />
+                    <EventCard className="h-full" doc={result} relationTo="events" />
                   ) : (
                     <Card className="h-full" doc={result} relationTo="posts" showCategories />
                   )}
