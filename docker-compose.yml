@@ -16,7 +16,7 @@ services:
     container_name: postgres-db
 
   payload:
-    image: node:22.12.0-alpine
+    image: node:20-alpine
     container_name: payload
     depends_on:
       postgres-db:
