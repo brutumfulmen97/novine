@@ -2,15 +2,13 @@
 import { cn } from '@/utilities/ui'
 import useClickableCard from '@/utilities/useClickableCard'
 import Link from 'next/link'
-import React, { Fragment } from 'react'
+import type { FC } from 'react'
 
 import type { Event } from '@/payload-types'
 
-import { Media } from '@/components/Media'
-
 export type CardEventData = Pick<Event, 'slug' | 'title'>
 
-export const EventCard: React.FC<{
+export const EventCard: FC<{
   alignItems?: 'center'
   className?: string
   doc?: CardEventData
