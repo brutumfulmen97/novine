@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  payload:
+    image: payload:latest # You'll need to build this image using your Dockerfile
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: payload-app
+    restart: always
+    env_file:
+      - .env
+    environment:
+      - NODE_ENV=production
+    volumes:
+      - media-storage:/app/public/media
+    ports:
+      - '3000:3000'
+
+volumes:
+  media-storage:
+    name: ${PROJECT_NAME}-media-storage
